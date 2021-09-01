@@ -9,7 +9,17 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "antd": "^3.3.2",
+    "classnames": "^2.2.5",
+    "ipfs-api": "^18.2.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
+    "truffle-contract": "^4.0.31",
+    "uuid-v4": "^0.1.0",
+    "web3": "^0.20.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -22,6 +32,9 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "devDependencies": {
+    "redux-devtools-extension": "^2.13.2"
   },
   "browserslist": {
     "production": [
