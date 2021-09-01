@@ -1,4 +1,4 @@
-**BLOCKCHAIN E-COMMERCE AOO**
+**BLOCKCHAIN E-COMMERCE APP**
 
 **Overview**: Build a simple ecommerce DApp store where everyone can sell/buy products. You'll be using Truffle to build the entire app end-to-end.
 
