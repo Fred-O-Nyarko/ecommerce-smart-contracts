@@ -16,7 +16,8 @@ body {
   border: none;
   border-radius: 0;
 }
-.search :global .ant-input, .search :global .ant-input-search-icon {
+.search :global .ant-input,
+.search :global .ant-input-search-icon {
   color: #fefefe;
 }
 .mainNav {

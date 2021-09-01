@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
-import {ActionTypes as types} from '../actions';
-import { IReduxStore } from '../types';
+import * as types from '../actions/types';
 
-const all = (state: Partial<IReduxStore["product"]>[] = [], action:any) => {
+const all = (state = [], action) => {
   switch (action.type) {
     case types.FETCH_PRODUCTS_SUCCESS:
       return [...action.products];
@@ -32,7 +31,7 @@ const all = (state: Partial<IReduxStore["product"]>[] = [], action:any) => {
   }
 };
 
-const isFetching = (state = false, action: any) => {
+const isFetching = (state = false, action) => {
   switch (action.type) {
     case types.FETCH_PRODUCTS:
       return true;
@@ -46,7 +45,7 @@ const isFetching = (state = false, action: any) => {
   }
 };
 
-const errorMessage = (state = null, action: any) => {
+const errorMessage = (state = null, action) => {
   switch (action.type) {
     case types.FETCH_PRODUCTS_FAIL:
       return action.message;
@@ -60,7 +59,7 @@ const errorMessage = (state = null, action: any) => {
   }
 };
 
-const addStatus = (state = '', action: any) => {
+const addStatus = (state = '', action) => {
   switch (action.type) {
     case types.ADD_PRODUCT:
       return 'ADDING';
@@ -79,7 +78,7 @@ const addStatus = (state = '', action: any) => {
   }
 };
 
-const addErrorMessage = (state = null, action: any) => {
+const addErrorMessage = (state = null, action) => {
   switch (action.type) {
     case types.ADD_PRODUCT_FAIL:
       return action.message;
@@ -93,7 +92,7 @@ const addErrorMessage = (state = null, action: any) => {
   }
 };
 
-const productsReducer = combineReducers({
+const products = combineReducers({
   all,
   isFetching,
   errorMessage,
@@ -101,4 +100,4 @@ const productsReducer = combineReducers({
   addStatus,
 });
 
-export default productsReducer;
+export default products;

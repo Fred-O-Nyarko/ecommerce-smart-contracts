@@ -1,8 +1,7 @@
 import { combineReducers } from 'redux';
-import {ActionTypes as types} from '../actions';
-import { IReduxStore } from '../types';
+import * as types from '../actions/types';
 
-const all = (state: Partial<IReduxStore["order"]>[] = [], action: any) => {
+const all = (state = [], action) => {
   switch (action.type) {
     case types.FETCH_ORDERS_SUCCESS:
       return [...action.orders];
@@ -33,7 +32,7 @@ const all = (state: Partial<IReduxStore["order"]>[] = [], action: any) => {
   }
 };
 
-const isFetching = (state = false, action: any) => {
+const isFetching = (state = false, action) => {
   switch (action.type) {
     case types.FETCH_ORDERS:
       return true;
@@ -47,7 +46,7 @@ const isFetching = (state = false, action: any) => {
   }
 };
 
-const errorMessage = (state = null, action: any) => {
+const errorMessage = (state = null, action) => {
   switch (action.type) {
     case types.FETCH_ORDERS_FAIL:
       return action.message;
@@ -61,7 +60,7 @@ const errorMessage = (state = null, action: any) => {
   }
 };
 
-const view = (state = 'buyer', action: any) => {
+const view = (state = 'buyer', action) => {
   switch (action.type) {
     case types.CHANGE_VIEW:
       return action.view;
@@ -71,11 +70,11 @@ const view = (state = 'buyer', action: any) => {
   }
 };
 
-const ordersReducer = combineReducers({
+const orders = combineReducers({
   all,
   isFetching,
   errorMessage,
   view,
 });
 
-export default ordersReducer;
+export default orders;

@@ -1,32 +1,30 @@
-import './App.css';
 import 'antd/dist/antd.css'
-import { Input, Layout, Menu } from 'antd';
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Layout, Menu, Input } from "antd";
+import Home from "./home";
+import YourOrders from "./your-orders";
+import AddProduct from "./add-product";
+import About from "./about";
+import MenuLink from "./menu-link";
+import logo from "../images/logo.svg";
+import "./app.css";
 
-import { Switch, Route } from 'react-router-dom';
-import MenuLink from './components/menu-link';
-import {Home} from './components'
-import About from './components/about';
-import AddProduct from './components/add-product';
-import YourOrders from './components/your-orders';
-const App = () => {
-  const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer } = Layout;
 const { Search } = Input;
-  return (
-    <Switch>
-    <Layout className="">
+
+const App = () => (
+  <Router>
+    <Layout className="app">
       <Header>
-        {/* <img className="logo" src={logo} alt="logo" /> */}
-        <Search
-          className="search"
-          placeholder="What are you looking for..."
-        />
+        <img className="logo" src={logo} alt="logo" />
+        <Search className="search" placeholder="What are you looking for..." />
       </Header>
 
       <Content className="content">
         <Menu
           className="mainNav"
           mode="horizontal"
-          defaultSelectedKeys={['active']}
+          defaultSelectedKeys={["active"]}
           selectable={false}
         >
           <MenuLink to="/" activeOnlyWhenExact label="Home" />
@@ -43,12 +41,9 @@ const { Search } = Input;
         </div>
       </Content>
 
-      <Footer className="footer">
-        DApp Store ©2018 Created by Nha Hoang
-      </Footer>
+      <Footer className="footer">DApp Store ©2018 Created by Nha Hoang</Footer>
     </Layout>
-  </Switch>
-  );
-}
+  </Router>
+);
 
 export default App;

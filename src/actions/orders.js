@@ -1,68 +1,60 @@
-import { getStoreContract, getEscrowContract } from '../../utils/contracts';
-import { getWeb3 } from '../../utils/web3';
-import { promisify } from '../../utils/promises';
-import {ActionTypes as types} from '../actions';
-import { useDispatch, useSelector } from 'react-redux';
+import { getStoreContract, getEscrowContract } from '../utils/contracts';
+import { getWeb3 } from '../utils/web3';
+import { promisify } from '../utils/promises';
+import * as types from './types';
 
-import { IReduxStore } from '../types';
+export const changeView = view => ({
+  type: types.CHANGE_VIEW,
+  view,
+});
 
+export const placeOrder = product => async dispatch => {
+  const web3 = getWeb3();
+  const Store = getStoreContract();
+  const priceInWei = web3.toWei(product.price, product.unit);
 
-export function useOrders(){
-    const state = useSelector((state: IReduxStore) => state.order)
-    const dispatch = useDispatch()
+  dispatch({
+    type: types.PLACE_ORDER,
+  });
 
-    function changeView(data: typeof types.CHANGE_VIEW){
-    dispatch({type: types.CHANGE_VIEW})
-    };
+  try {
+    const store = await Store.deployed();
+    const coinbase = await promisify(web3.eth.getCoinbase)();
 
-    async function placeOrder (product: Partial<IReduxStore['product']>){
-      const web3 = getWeb3();
-      const Store = getStoreContract();
-      const priceInWei = web3.toWei(product.price, product.unit);
-
-      console.table([web3, Store, priceInWei, 'tests']);
-      
-    
-      dispatch({type: types.PLACE_ORDER})
-    
-      try {
-        const store = await Store.deployed();
-        const coinbase = await promisify(web3.eth.getCoinbase)();
-    
-        store.OrderCreated().watch((error: any, event: any) => {
-          if (error) {
-            return;
-          }
-    
-          const {
-            productId, seller, buyer, escrow,
-          } = event.args;
-    
-          dispatch({
-            type: types.PLACE_ORDER_SUCCESS,
-            order: {
-              productId,
-              seller,
-              buyer,
-              escrow,
-              product,
-            },
-          });
-        });
-    
-        await store.placeOrder(product.id, {
-          from: coinbase,
-          value: priceInWei,
-        });
-      } catch (ex) {
-        dispatch({
-          type: types.PLACE_ORDER_FAIL,
-          message: ex.toString ? ex.toString() : ex,
-        });
+    store.OrderCreated().watch((error, event) => {
+      if (error) {
+        return;
       }
-    };
 
-    async function fetchOrders(from = 'buyer'){
+      const {
+        productId, seller, buyer, escrow,
+      } = event.args;
+
+      dispatch({
+        type: types.PLACE_ORDER_SUCCESS,
+        order: {
+          productId,
+          seller,
+          buyer,
+          escrow,
+          product,
+        },
+      });
+    });
+
+    await store.placeOrder(product.id, {
+      from: coinbase,
+      value: priceInWei,
+    });
+  } catch (ex) {
+    dispatch({
+      type: types.PLACE_ORDER_FAIL,
+      message: ex.toString ? ex.toString() : ex,
+    });
+  }
+};
+
+export const fetchOrders = (from = 'buyer') => async dispatch => {
   const web3 = getWeb3();
   const Store = getStoreContract();
 
@@ -79,7 +71,7 @@ export function useOrders(){
       { fromBlock: 0, toBlock: 'latest' },
     );
     const events = await promisify(orderCreatedEvent.get.bind(orderCreatedEvent))();
-    const orders = await Promise.all(events.map(async (event: any) => {
+    const orders = await Promise.all(events.map(async event => {
       const id = event.args.productId;
       const [
         name,
@@ -118,7 +110,7 @@ export function useOrders(){
   }
 };
 
-async function acceptOrder(order: Partial<IReduxStore["order"]>){
+export const acceptOrder = order => async dispatch => {
   const web3 = getWeb3();
   const Store = getStoreContract();
   const Escrow = getEscrowContract();
@@ -132,7 +124,7 @@ async function acceptOrder(order: Partial<IReduxStore["order"]>){
     const escrow = Escrow.at(order.escrow);
     const coinbase = await promisify(web3.eth.getCoinbase)();
 
-    store.ProductUpdated().watch((error: any, event: any) => {
+    store.ProductUpdated().watch((error, event) => {
       if (error) {
         return;
       }
@@ -159,7 +151,7 @@ async function acceptOrder(order: Partial<IReduxStore["order"]>){
   }
 };
 
-async function rejectOrder(order: Partial<IReduxStore["order"]>){
+export const rejectOrder = order => async dispatch => {
   const web3 = getWeb3();
   const Store = getStoreContract();
   const Escrow = getEscrowContract();
@@ -173,7 +165,7 @@ async function rejectOrder(order: Partial<IReduxStore["order"]>){
     const escrow = Escrow.at(order.escrow);
     const coinbase = await promisify(web3.eth.getCoinbase)();
 
-    store.ProductUpdated().watch((error: any, event: any) => {
+    store.ProductUpdated().watch((error, event) => {
       if (error) {
         return;
       }
@@ -201,22 +193,3 @@ async function rejectOrder(order: Partial<IReduxStore["order"]>){
     });
   }
 };
-
-    return{
-        ...state,
-        changeView,
-        placeOrder,
-        acceptOrder,
-        rejectOrder,
-        fetchOrders
-    }
-}
-
-
-
-
-
-
-
-
-
