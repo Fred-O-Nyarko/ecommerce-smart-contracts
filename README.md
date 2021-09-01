@@ -1,6 +1,4 @@
-# Week 2 Project: Ecommerce Store
-
-**Due**: Sunday, March 25th at 10pm
+**BLOCKCHAIN E-COMMERCE AOO**
 
 **Overview**: Build a simple ecommerce DApp store where everyone can sell/buy products. You'll be using Truffle to build the entire app end-to-end.
 
